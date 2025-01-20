@@ -2,6 +2,8 @@
 set -e
 
 USE_TTY=$1
+HTOP_COMMAND="$2"
+
 export TERM=linux
 LINES=$(tput lines)
 COLUMNS=$(tput cols)
@@ -14,6 +16,6 @@ fi
 
 timeout 300 script -qfc \
     "stty rows $LINES cols $COLUMNS; \
-    stty -echo -icanon; \
-    htop -d 50 --no-mouse --sort-key PERCENT_CPU" \
+    stty -F /dev/tty$USE_TTY -echo -icanon intr undef quit undef susp undef; \
+    $HTOP_COMMAND" \
     /dev/null < /dev/null > /dev/tty$USE_TTY

@@ -1,4 +1,4 @@
-# htoptty: Run htop on a TTY
+# htoptty: run htop on a TTY
 
 `htoptty` is a small script to run htop on a TTY, such as `/dev/tty7`. This can
 be useful when you have a display connected to a device and want to securely run
@@ -21,7 +21,7 @@ To install `htoptty`, follow these steps:
 
 Easy (default config on TTY7):
 ```bash
-curl $(https://raw.githubusercontent.com/jdgregson/htoptty/refs/heads/master/setup.sh) | sudo bash
+curl "https://raw.githubusercontent.com/jdgregson/htoptty/refs/heads/master/setup.sh" | sudo bash
 ```
 
 Custom:
@@ -35,17 +35,14 @@ Custom:
 
 The `setup.sh` script uses the following default configuration:
 
-- TTY device: tty7
-- `htoptty` script path: /usr/local/bin/htoptty
-- Dedicated user: htoptty
-
-To modify these settings, edit the following variables at the beginning of the `setup.sh` script:
-
 ```bash
+HTOP_COMMAND="htop -d 50 --no-mouse --sort-key PERCENT_CPU"
 USE_TTY=7
 SCRIPT_PATH=/usr/local/bin/htoptty
 USE_USER=htoptty
 ```
+
+You can edit it before running as needed.
 
 ### Viewing htoptty output
 

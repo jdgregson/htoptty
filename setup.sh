@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+HTOP_COMMAND="htop -d 50 --no-mouse --sort-key PERCENT_CPU"
 USE_TTY=7
 SCRIPT_PATH=/usr/local/bin/htoptty
 USE_USER=htoptty
@@ -22,9 +23,17 @@ if [ ! -f "$SCRIPT_PATH" ]; then
 fi
 chmod +x $SCRIPT_PATH
 
-useradd -r -s /sbin/nologin $USE_USER
-usermod -a -G tty $USE_USER
-chmod g+rw /dev/tty$USE_TTY
+if ! id "$USE_USER" &>/dev/null; then
+    useradd -r -s /sbin/nologin "$USE_USER"
+fi
+
+if ! groups "$USE_USER" | grep -q "\btty\b"; then
+    usermod -a -G tty "$USE_USER"
+fi
+
+if [ "$(stat -c %a /dev/tty$USE_TTY)" != "660" ]; then
+    chmod g+rw /dev/tty$USE_TTY
+fi
 
 cat >/etc/udev/rules.d/70-tty$USE_TTY-permissions.rules << EOF
 KERNEL=="tty$USE_TTY", MODE="0660", GROUP="tty"
@@ -39,7 +48,7 @@ ConditionPathExists=/dev/tty$USE_TTY
 
 [Service]
 Type=simple
-ExecStart=$SCRIPT_PATH $USE_TTY
+ExecStart=$SCRIPT_PATH $USE_TTY "$HTOP_COMMAND"
 StandardInput=null
 StandardOutput=tty
 TTYPath=/dev/tty$USE_TTY
@@ -51,6 +60,23 @@ RestartSec=0
 TTYReset=yes
 TTYVHangup=yes
 TTYVTDisallocate=yes
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH CAP_SYS_PTRACE
+AmbientCapabilities=CAP_DAC_READ_SEARCH CAP_SYS_PTRACE
+MemoryDenyWriteExecute=true
+ReadOnlyPaths=/
+ReadWritePaths=/dev/tty$USE_TTY
+RestrictSUIDSGID=true
+RemoveIPC=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=none
+RestrictNamespaces=true
+NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
