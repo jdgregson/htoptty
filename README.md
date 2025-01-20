@@ -32,8 +32,6 @@ Custom:
 1. Make the setup script executable: `chmod +x setup.sh`
 1. Run the setup script with root privileges: `sudo ./setup.sh`
 
-You can edit it before running as needed.
-
 ## Using `htoptty`
 
 ### Starting service
@@ -51,7 +49,7 @@ systemctl stop htoptty
 You can view the htop output by changing your display to use the configured TTY
 (typically TTY1 or TTY7).
 
-On systems such as Ubuntu, you can use `Crtl + Alt + <num>` locally to switch
+On systems such as Ubuntu, you can use `Crtl + Alt + F<num>` locally to switch
 TTYs, where `<num>` is a number between 1 and 7.
 
 ## Configuration
