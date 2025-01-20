@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+
+USE_TTY=$1
+export TERM=linux
+LINES=$(tput lines)
+COLUMNS=$(tput cols)
+export LINES COLUMNS
+
+if [ -z "$USE_TTY" ] || ! [[ "$USE_TTY" =~ ^[0-9]{1,2}$ ]]; then
+    echo "Error: Please provide a valid TTY number (0-99)"
+    exit 1
+fi
+
+timeout 300 script -qfc \
+    "stty rows $LINES cols $COLUMNS; \
+    stty -echo -icanon; \
+    htop -d 50 --no-mouse --sort-key PERCENT_CPU" \
+    /dev/null < /dev/null > /dev/tty$USE_TTY
