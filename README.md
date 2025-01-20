@@ -2,7 +2,8 @@
 
 `htoptty` is a small script to run htop on a TTY, such as `/dev/tty7`. This can
 be useful when you have a display connected to a device and want to securely run
-htop on the display unsupervised.
+htop on the display unsupervised, or want your VM manager to show htop output on
+all of your VM screens without having to log in.
 
 `htoptty` creates a no-login user to run htop and outputs directly to a TTY. The
 htop instance does not accept any keyboard or mouse interaction of any kind and
@@ -31,7 +32,29 @@ Custom:
 1. Make the setup script executable: `chmod +x setup.sh`
 1. Run the setup script with root privileges: `sudo ./setup.sh`
 
-### Configuration
+You can edit it before running as needed.
+
+## Using `htoptty`
+
+### Starting service
+```bash
+systemctl start htoptty
+```
+
+### Stopping service
+```bash
+systemctl stop htoptty
+```
+
+### Viewing htoptty output
+
+You can view the htop output by changing your display to use the configured TTY
+(typically TTY1 or TTY7).
+
+On systems such as Ubuntu, you can use `Crtl + Alt + <num>` locally to switch
+TTYs, where `<num>` is a number between 1 and 7.
+
+## Configuration
 
 The `setup.sh` script uses the following default configuration:
 
@@ -41,13 +64,3 @@ USE_TTY=7
 SCRIPT_PATH=/usr/local/bin/htoptty
 USE_USER=htoptty
 ```
-
-You can edit it before running as needed.
-
-### Viewing htoptty output
-
-You can view the htop output by changing your display to use the selected TTY
-(typically TTY7).
-
-On systems such as Ubuntu, you can use `Crtl + Alt + <num>` locally to switch
-TTYs, where `<num>` is a number between 1 and 7.

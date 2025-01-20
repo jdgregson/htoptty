@@ -23,7 +23,7 @@ if [ ! -f "$SCRIPT_PATH" ]; then
 fi
 chmod +x $SCRIPT_PATH
 
-if ! id "$USE_USER" &>/dev/null; then
+if ! id "$USE_USER" &> /dev/null; then
     useradd -r -s /sbin/nologin "$USE_USER"
 fi
 
@@ -35,7 +35,7 @@ if [ "$(stat -c %a /dev/tty$USE_TTY)" != "660" ]; then
     chmod g+rw /dev/tty$USE_TTY
 fi
 
-cat >/etc/udev/rules.d/70-tty$USE_TTY-permissions.rules << EOF
+cat > /etc/udev/rules.d/70-tty$USE_TTY-permissions.rules << EOF
 KERNEL=="tty$USE_TTY", MODE="0660", GROUP="tty"
 EOF
 
