@@ -14,13 +14,13 @@ This repo provides a script to install `htoptty` and a systemd service.
 ### Installation
 
 Prerequisites:
-- A Linux system with systemd (built on Ubuntu Server 22.04)
+- A Linux system with systemd (built on Ubuntu Server 26.04)
 - `htop` installed on the system
 - `curl` for downloading the `htoptty` script
 
 To install `htoptty`, follow these steps:
 
-Easy (default config on TTY7):
+Easy (default config on TTY1):
 ```bash
 curl "https://raw.githubusercontent.com/jdgregson/htoptty/refs/heads/master/setup.sh" | sudo bash
 ```
@@ -58,7 +58,7 @@ The `setup.sh` script uses the following default configuration:
 
 ```bash
 HTOP_COMMAND="htop -d 50 --no-mouse --sort-key PERCENT_CPU"
-USE_TTY=7
+USE_TTY=1
 SCRIPT_PATH=/usr/local/bin/htoptty
 USE_USER=htoptty
 ```

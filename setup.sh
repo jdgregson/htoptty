@@ -2,7 +2,7 @@
 set -euo pipefail
 
 HTOP_COMMAND="htop -d 50 --no-mouse --sort-key PERCENT_CPU"
-USE_TTY=7
+USE_TTY=1
 SCRIPT_PATH=/usr/local/bin/htoptty
 USE_USER=htoptty
 
@@ -48,6 +48,7 @@ ConditionPathExists=/dev/tty$USE_TTY
 
 [Service]
 Type=simple
+ExecStartPre=+/bin/chmod 660 /dev/tty1
 ExecStart=$SCRIPT_PATH $USE_TTY "$HTOP_COMMAND"
 StandardInput=null
 StandardOutput=tty
